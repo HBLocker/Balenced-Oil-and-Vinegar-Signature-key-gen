@@ -4,11 +4,7 @@
 #include <math.h>
 #include <time.h>
 #include <fstream>
-#define mat_elem(a, y, x, n) (a + ((y) * (n) + (x)))
-
 using namespace std;
-
-
 #undef A
 static int a =7;
 static int b =6;
@@ -35,28 +31,39 @@ int  bijective_hash(int val) {
     val ^=(val>>3);
     return val;
 }
-//signature defined here chose random values of V
-void gauss_eliminate(int i,int j)
-{
 
- //https://en.cppreference.com/w/cpp/numeric/math/erfc 
-
-}
 
 int main(void)
 {
-int d;
 
 ofstream secret;
 secret.open ("private.txt"); //secret key
 for (int j=0;j<2048;j++)
   {
-int random = 1;
+int random = 100;
 std::string msg = std:: to_string(random);
 string c = affine(msg);
 int hash = (int) hash_fn(c);
 int final =  bijective_hash(hash); //vin + oil
 secret  << final;
+//verfication of key
+  const int nrolls=10000;  // number of experiments
+  const int nstars=10;    // maximum number of stars to distribute
+  std::default_random_engine generator;
+  std::normal_distribution<double> distribution(final);
+  int p[10]={};
+  for (int i=0; i<nrolls; ++i) {
+    double number = distribution(generator);
+    if ((number>=0.0)&&(number<100.0)) ++p[int(number)];
+  }
+  std::cout <<"Gaussian Key sig::" << std::endl;
+  std::cout<<final;
+
+  for (int i=0; i<10; ++i) {
+    std::cout << final << "-" << (final+1) << ": ";
+    std::cout << std::string(p[i]*nstars/nrolls,'*') << std::endl;
+  }
+
 }
 
 secret.close();
