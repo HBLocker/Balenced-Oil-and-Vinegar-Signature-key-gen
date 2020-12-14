@@ -1,84 +1,38 @@
-#include<bits/stdc++.h>
 #include <stdio.h>
-#include <functional>
-#include <math.h>
-#include <time.h>
-#include <fstream>
-using namespace std;
-#undef A
-static int a =7;
-static int b =6;
-std::hash<std::string> hash_fn;
-//alfine function denoted as  E(x) = (ax+b)mod M (encryption decryption isnt stated for the key gen)
-//paper states it is the following K^2
-string affine(string m) {
-   string c = "";
-   for (int i = 0; i < m.length(); i++) {
-      if(m[i]!=' ')
-         c = c + (char) ((((a * (m[i]-'A') ) + b) % 26) + 'A');
-      else
-         c += m[i];
-   }
-   return c;
-};
-// H{0,1}^n -> {0,1}
-int  bijective_hash(int val) {
-  int z = rand()%10;
-  int l = rand()%10;
-    val = ((val*z) + l) & 0x7FFFFFFF;
-    val ^= (val>>15);
-    val ^= (val>>8);
-    val ^=(val>>3);
-    return val;
-}
-
-
-int main(void)
-{
-
-ofstream secret;
-secret.open ("private.txt"); //secret key
-for (int j=0;j<2048;j++)
+#include <stdint.h>
+#include <string>
+uint32_t bijective(uint8_t a, uint8_t b, uint8_t c)
+ {
+  //each element is a function between two sets.
+  //a one to one function
+  //coppied from here :: en.wikipedia.org/wiki/Bijection
+  uint32_t X = 0;
+  for (int i=0; i<16; i++)
   {
-int random = 100;
-std::string msg = std:: to_string(random);
-string c = affine(msg);
-int hash = (int) hash_fn(c);
-int final =  bijective_hash(hash); //vin + oil
-secret  << final;
-//verfication of key
-  const int nrolls=10000;  // number of experiments
-  const int nstars=10;    // maximum number of stars to distribute
-  std::default_random_engine generator;
-  std::normal_distribution<double> distribution(final);
-  int p[10]={};
-  for (int i=0; i<nrolls; ++i) {
-    double number = distribution(generator);
-    if ((number>=0.0)&&(number<100.0)) ++p[int(number)];
+    //loops though function
+    //An injective surjective function (bijection)
+    X |= (a & (1 << i)) << (0 + (i <<1)); // one to many for bits
+
+    X |= (b & (1 << i)) << (0 + (i << 1));
+
+    X |= (c & (1 << i)) << (0 + (i << 1));
+
+    X |= (X & (1 << i)) << (0 + (i <<1));
   }
-  std::cout <<"Gaussian Key sig::" << std::endl;
-  std::cout<<final;
-
-  for (int i=0; i<10; ++i) {
-    std::cout << final << "-" << (final+1) << ": ";
-    std::cout << std::string(p[i]*nstars/nrolls,'*') << std::endl;
-  }
-
+  return X;
 }
+//affine functions in mathermatics basicly flip the values upside down via rotationhttps://math.stackexchange.com/questions/3102058/affine-cypher-find-function-and-plaintext
+//////not sure if correct ^^
+/// https://math.asu.edu/sites/default/files/affine.pdf
 
-secret.close();
-ofstream Public;
-Public.open("public.txt");
-for (int p=0;p<2048;p++)
-  {
-int random = rand()%10000;
-std::string msg = std:: to_string(random);
-string c = affine(msg);
-int hash = (int) hash_fn(c);
-int final = bijective_hash(hash);
-expm1(final); //vin plua oil ^-1
-Public  << final;
-}
+#define Affine_fun (Y,S,F)(   \
+  Y = %26 << S << F \ //NOT FINISHED 
+)
 
-return 0;
+
+
+
+int main(int argc, char **argv) {
+  printf("%u\n", bijective(10, 17, 23));
+  return 0;
 }
