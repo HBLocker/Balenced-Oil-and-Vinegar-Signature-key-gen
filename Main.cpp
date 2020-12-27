@@ -27,7 +27,7 @@ int affine_shift(uint8_t a) //affine shift a
 {
   uint32_t X =0;
   int shift = rand()%10;
-  X |= (a*shift)%26;
+  X |= (a*shift)%26; //not corrrect wil fix later 
 return X;
 }
 int affine_shift1(uint8_t b) //affine shift B
