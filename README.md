@@ -4,7 +4,7 @@
   </h1>
  
   <h3>
-  Unbalanced Oil and Vinegar Signature Schemes (Aviad Kipnis)
+  Unbalanced Oil and Vinegar Signature Schemes (Aviad Kipnis,et al)
 http://www.goubin.fr/papers/OILLONG.PDF
  
   </h3>
