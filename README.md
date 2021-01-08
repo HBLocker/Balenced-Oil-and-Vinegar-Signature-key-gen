@@ -1,4 +1,8 @@
-# Balenced-Oil-and-Vinegar-Signature-key-gen
+# Oil and Vinegar-Signature-key-gen
+<h1> 
+  This is a proof of concept, I wanted to se how this works roughly. 
+  Very slow. 
+  </h1>
 Basic example  of a balanced oil and vinegar signature scheme
 The scheme is an advanced scheme based on previous schemes, this crypto scheme incorporated the use of asymmetric signatures.
 Vinegar>Oil for this scheme, Both vinegar and oil and random values within the algorithms. 
