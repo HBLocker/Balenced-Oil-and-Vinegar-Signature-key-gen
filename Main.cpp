@@ -25,22 +25,31 @@ uint32_t bijective_shift(uint8_t a, uint8_t b, uint8_t c)
 
 int affine_shift(uint8_t a) //affine shift a
 {
-  uint32_t X =0;
-  int shift = rand()%10;
-  X |= (a*shift)%26; //not corrrect wil fix later 
+long N=999999999;
+long randNumber;
+long X;
+for(long i=0;i<N;i++)
+randNumber=i+rand();
+X = (a*randNumber)%26; //modlo alaphbet?
+
 return X;
 }
-int affine_shift1(uint8_t b) //affine shift B
+
+int affine_shift1(uint8_t b) //affine shift a
 {
-  uint32_t X =0;
-  int shift = rand()%10;
-  X |= (b*shift)%26;
+long M=999999999;
+long randNumber;
+long X;
+long equation;
+for(long i=0;i<M;i++)
+randNumber=i+rand();
+X = (b*randNumber)%26; //modlo alaphbet?
+
 return X;
 }
 
 int main(int argc, char **argv) {
-
-  for (int i =0;i<10;i++)
+  for (int i =0;i<128;i++) //paper denoted as n
   {
 int R1 = rand()%2048; int R2 = rand()%2048; int R3 = rand()%2048;
 //  printf("%u\n", bijective_affine_shift(240, 11, 100));
@@ -48,10 +57,12 @@ int R1 = rand()%2048; int R2 = rand()%2048; int R3 = rand()%2048;
 //std::cout<<bijective_shift(R1,R2,R3);
 int A = bijective_shift(R1,R2,R3); //A ==shift
 int B = bijective_shift(R3,R2,R1); //A ==shift
-int O = affine_shift(A);
-int V = affine_shift1(B);
-int sum = O << V;
-std::cout<<sum<<::std::endl;
+int K1 = A+B;
+ //1.0 KN+V shift -> KN+ v;
+int O = affine_shift(K1);
+int V = affine_shift1(A>>B);
+int sum = (O + V); //fixed not shifted but O AND vinigar
+std::cout<<sum;
 }
 
   return 0;
